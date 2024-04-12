@@ -2,8 +2,7 @@
 
 ## Get Letsencrypt certificates for DuckDNS
 
-### Obtain DuckDNS token
-
+### Obtain DuckDNS token
 Access to DuckDNS console and obtain the token.
 
 
