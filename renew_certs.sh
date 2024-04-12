@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Variables
+EMAIL="hfolguera@gmail.com"
+DOMAIN="calfolguera.duckdns.org"
+
 # Create backup directory
 mkdir -p backups
 
@@ -15,16 +19,16 @@ docker run -v "/etc/letsencrypt:/etc/letsencrypt" -v "/var/log/letsencrypt:/var/
    certonly \
      --non-interactive \
      --agree-tos \
-     --email hfolguera@gmail.com \
+     --email ${EMAIL} \
      --preferred-challenges dns \
      --authenticator dns-duckdns \
      --dns-duckdns-token ${DDNS_TOKEN} \
      --dns-duckdns-propagation-seconds 60 \
-     -d "*.calfolguera.duckdns.org"
+     -d "*.${DOMAIN}"
 
 # Move new certificates to current folder
-mv /etc/letsencrypt/live/calfolguera.duckdns.org/fullchain.pem .
-mv /etc/letsencrypt/live/calfolguera.duckdns.org/privkey.pem .
+mv /etc/letsencrypt/live/${DOMAIN}/fullchain.pem .
+mv /etc/letsencrypt/live/${DOMAIN}/privkey.pem .
 
 # Update k8s secret
 kubectl delete secret default-server-secret -n ingress-nginx
