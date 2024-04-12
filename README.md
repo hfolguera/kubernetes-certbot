@@ -3,7 +3,10 @@
 ## Get Letsencrypt certificates for DuckDNS
 
 ### Obtain DuckDNS token
+
 Access to DuckDNS console and obtain the token.
+
+
 Create a file with the following format `duckdns.ini`:
 ```
 dns_duckdns_token=AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE
