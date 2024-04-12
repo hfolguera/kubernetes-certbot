@@ -1,0 +1,7 @@
+*.old
+*.bck
+*.swp
+*.tmp
+backups
+duckdns.ini
+*.pem
