@@ -11,8 +11,8 @@ DOMAIN="calfolguera.duckdns.org"
 mkdir -p ${DIR_NAME}/backups
 
 # Backup current certificate
-mv -f ${DIR_NAME}/fullchain.pem backups/ 2>/dev/null
-mv -f ${DIR_NAME}/privkey.pem backups/ 2>/dev/null
+mv -f ${DIR_NAME}/fullchain.pem ${DIR_NAME}/backups/ 2>/dev/null
+mv -f ${DIR_NAME}/privkey.pem ${DIR_NAME}/backups/ 2>/dev/null
 
 # Obtain duckdns token
 DDNS_TOKEN=`cat ${DIR_NAME}/duckdns.ini | cut -d = -f 2`
