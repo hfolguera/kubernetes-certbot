@@ -1,18 +1,21 @@
 #!/bin/bash
 
+# Global variables
+DIR_NAME=$(dirname $0)
+
 # Variables
 EMAIL="hfolguera@gmail.com"
 DOMAIN="calfolguera.duckdns.org"
 
 # Create backup directory
-mkdir -p backups
+mkdir -p ${DIR_NAME}/backups
 
 # Backup current certificate
-mv -f fullchain.pem backups/
-mv -f privkey.pem backups/
+mv -f ${DIR_NAME}/fullchain.pem backups/ 2>/dev/null
+mv -f ${DIR_NAME}/privkey.pem backups/ 2>/dev/null
 
 # Obtain duckdns token
-DDNS_TOKEN=`cat duckdns.ini | cut -d = -f 2`
+DDNS_TOKEN=`cat ${DIR_NAME}/duckdns.ini | cut -d = -f 2`
 
 # Get new Certificates
 docker run -v "/etc/letsencrypt:/etc/letsencrypt" -v "/var/log/letsencrypt:/var/log/letsencrypt" infinityofspace/certbot_dns_duckdns:latest \
@@ -27,11 +30,16 @@ docker run -v "/etc/letsencrypt:/etc/letsencrypt" -v "/var/log/letsencrypt:/var/
      -d "*.${DOMAIN}"
 
 # Move new certificates to current folder
-mv /etc/letsencrypt/live/${DOMAIN}/fullchain.pem .
-mv /etc/letsencrypt/live/${DOMAIN}/privkey.pem .
+cp /etc/letsencrypt/live/${DOMAIN}/fullchain.pem ${DIR_NAME}/.
+cp /etc/letsencrypt/live/${DOMAIN}/privkey.pem ${DIR_NAME}/.
+
+# Remove old folders
+rm -rf /etc/letsencrypt/archive/${DOMAIN}*
+rm -rf /etc/letsencrypt/live/${DOMAIN}*
+rm -rf /etc/letsencrypt/renewal/${DOMAIN}*
 
 # Update k8s secret
 kubectl delete secret default-server-secret -n ingress-nginx
-kubectl create secret tls default-server-secret --key privkey.pem --cert fullchain.pem -n ingress-nginx
+kubectl create secret tls default-server-secret --key ${DIR_NAME}/privkey.pem --cert ${DIR_NAME}/fullchain.pem -n ingress-nginx
 
 
