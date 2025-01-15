@@ -2,6 +2,7 @@
 
 # Global variables
 DIR_NAME=$(dirname $0)
+export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # Variables
 EMAIL="hfolguera@gmail.com"
